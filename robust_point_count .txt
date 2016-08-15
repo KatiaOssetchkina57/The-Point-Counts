@@ -1,3 +1,6 @@
+//This is a point count program
+//By Katia Ossetchkina, 2016
+
 var s_directory, s_name, s_results, s_properties, s_traverses;
 s_directory = getInfo("image.directory");
 s_name = getInfo("image.filename");
