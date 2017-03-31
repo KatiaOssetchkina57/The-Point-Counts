@@ -1,0 +1,1001 @@
+s_directory = getInfo("image.directory");
+s_name = getInfo("image.filename");
+s_results = s_directory + replace(s_name, ".tif", "_bcPtCnt.txt"); //  name of results file
+
+i_samples = getNumber("Sub-divide area into how many squares? \nWhole numbers greater than zero only", i_samples); // number of sample points
+while (i_samples <=0) {beep();beep();i_samples =getNumber("Select a whole number larger than zero ", i_samples);} 
+
+arrownum= getNumber("# of arrows (2^n only; max 8)", arrownum); 
+while (arrownum != 1 && arrownum!= 2 && arrownum !=4 && arrownum !=8 ) {beep();beep();arrownum=getNumber("# of arrows (2^n only; max 8)", arrownum); }
+linenum=0; //number of lines going through speciman (optional)
+arrow_color = "yellow"; // the color of the marker arrow
+Count=1;
+temp=0;
+var char='a';
+
+phase=0;
+temp1="phase1"; temp1c=0;
+temp2="phase2"; temp2c=0;
+temp3="phase3"; temp3c=0;
+temp4="phase4"; temp4c=0;
+temp5="phase5"; temp5c=0;
+temp6="phase6"; temp6c=0;
+temp7="phase7"; temp7c=0;
+temp8="phase8"; temp8c=0;
+temp9="phase9"; temp9c=0;
+tempc=0;
+
+
+phasenum=0;
+
+var i_a_x,  i_a_y,  i_a_w,  i_a_h;
+
+if (getBoolean("The phases that will be measured by default are: \n1." + temp1 + "\n2." + temp2 + "\n3." + temp3 + "\n4." + temp4 + "\n5." + temp5 + "\n6." + temp6 + "\n7." + temp7 + "\nDo you want to set your own phases?")){
+phasenum = getNumber("How many phases do you want to set? (up to 9)", phasenum);
+while (phasenum <=0 ) {beep();phasenum = getNumber ("Acceptable range is 1-9!", phasenum);}
+while (phasenum>=10)  {beep();phasenum = getNumber ("Acceptable range is 1-9!", phasenum);}
+if (phasenum==1) temp1=getString("What is your phase", 'aggregate');
+else if (phasenum==2) {Dialog.create("Set Phases");
+Dialog.addString("What is phase 1?", 'air voids');
+Dialog.addString("What is phase 2?", 'aggregate');
+Dialog.show();
+temp1=Dialog.getString();
+temp2=Dialog.getString();}
+else if (phasenum==3) {Dialog.create("Set Phases");
+Dialog.addString("What is phase 1?", 'air voids');
+Dialog.addString("What is phase 2?", 'aggregate');
+Dialog.addString("What is phase 3?", 'silica fume');
+Dialog.show();
+temp1=Dialog.getString();
+temp2=Dialog.getString();
+temp3=Dialog.getString();}
+else if (phasenum==4) {Dialog.create("Set Phases");
+Dialog.addString("What is phase 1?", 'air voids');
+Dialog.addString("What is phase 2?", 'aggregate');
+Dialog.addString("What is phase 3?", 'silica fume');
+Dialog.addString("What is phase 4?", 'paste');
+Dialog.show();
+temp1=Dialog.getString();
+temp2=Dialog.getString();
+temp3=Dialog.getString();
+temp4=Dialog.getString();}
+else if (phasenum==5) {Dialog.create("Set Phases");
+Dialog.addString("What is phase 1?", 'air voids');
+Dialog.addString("What is phase 2?", 'fine aggregate');
+Dialog.addString("What is phase 3?", 'coarse aggregate');
+Dialog.addString("What is phase 4?", 'paste');
+Dialog.addString("What is phase 5?", 'silica fume');
+Dialog.show();
+temp1=Dialog.getString();
+temp2=Dialog.getString();
+temp3=Dialog.getString();
+temp4=Dialog.getString();
+temp5=Dialog.getString();}
+else if (phasenum==6) {Dialog.create("Set Phases");
+Dialog.addString("What is phase 1?", 'air voids');
+Dialog.addString("What is phase 2?", 'fine aggregate');
+Dialog.addString("What is phase 3?", 'coarse aggregate');
+Dialog.addString("What is phase 4?", 'paste');
+Dialog.addString("What is phase 5?", 'silica fume');
+Dialog.addString("What is phase 6?", 'lime');
+Dialog.show();
+temp1=Dialog.getString();
+temp2=Dialog.getString();
+temp3=Dialog.getString();
+temp4=Dialog.getString();
+temp5=Dialog.getString();
+temp6=Dialog.getString();}
+else if (phasenum==7) {Dialog.create("Set Phases");
+Dialog.addString("What is phase 1?", 'air voids');
+Dialog.addString("What is phase 2?", 'fine aggregate');
+Dialog.addString("What is phase 3?", 'coarse aggregate');
+Dialog.addString("What is phase 4?", 'paste');
+Dialog.addString("What is phase 5?", 'silica fume');
+Dialog.addString("What is phase 6?", 'lime');
+Dialog.addString("What is phase 7?", 'other');
+Dialog.show();
+temp1=Dialog.getString();
+temp2=Dialog.getString();
+temp3=Dialog.getString();
+temp4=Dialog.getString();
+temp5=Dialog.getString();
+temp6=Dialog.getString();
+temp7=Dialog.getString();}
+else if (phasenum==8) {Dialog.create("Set Phases");
+Dialog.addString("What is phase 1?", 'air voids');
+Dialog.addString("What is phase 2?", 'fine aggregate');
+Dialog.addString("What is phase 3?", 'coarse aggregate');
+Dialog.addString("What is phase 4?", 'paste');
+Dialog.addString("What is phase 5?", 'silica fume');
+Dialog.addString("What is phase 6?", 'lime');
+Dialog.addString("What is phase 7?", 'stuff');
+Dialog.addString("What is phase 8?", 'other');
+Dialog.show();
+temp1=Dialog.getString();
+temp2=Dialog.getString();
+temp3=Dialog.getString();
+temp4=Dialog.getString();
+temp5=Dialog.getString();
+temp6=Dialog.getString();
+temp7=Dialog.getString();
+temp8=Dialog.getString();}
+else if (phasenum==9) {Dialog.create("Set Phases");
+Dialog.addString("What is phase 1?", 'air voids');
+Dialog.addString("What is phase 2?", 'fine aggregate');
+Dialog.addString("What is phase 3?", 'coarse aggregate');
+Dialog.addString("What is phase 4?", 'paste');
+Dialog.addString("What is phase 5?", 'silica fume');
+Dialog.addString("What is phase 6?", 'lime');
+Dialog.addString("What is phase 7?", 'stuff');
+Dialog.addString("What is phase 8?", 'metal');
+Dialog.addString("What is phase 9?", 'wood');
+Dialog.show();
+temp1=Dialog.getString();
+temp2=Dialog.getString();
+temp3=Dialog.getString();
+temp4=Dialog.getString();
+temp5=Dialog.getString();
+temp6=Dialog.getString();
+temp7=Dialog.getString();
+temp8=Dialog.getString();
+temp9=Dialog.getString();}
+}
+h = getHeight();
+	getSelectionBounds(i_a_x,  i_a_y,  i_a_w,  i_a_h);
+
+// make sure an area has been selected
+if (h != i_a_h) {
+	// get the area of the selection and divide by the number of samples to establish roi area
+	i_selection = i_a_w * i_a_h;
+	i_roi_area = floor(i_selection / (i_samples+1));
+	i_roi_edge = floor(sqrt(i_roi_area));
+	if (i_roi_edge%2 > 0) i_roi_edge += 1; // make the edge length even so that the arrow is nicely centered
+	i_x_steps = floor(i_a_w / i_roi_edge); // the number of sample steps in a row
+	i_y_steps = floor((i_samples+1) / i_x_steps); // the number of sample steps in a column
+
+
+
+	// iterate through the sample locations and collect data from the user
+	for (var y_step = 0; y_step < i_y_steps; y_step++) {
+		for (var x_step = 0; x_step < i_x_steps; x_step++) {
+			x = i_a_x + x_step * i_roi_edge; // the current x-position
+			y = i_a_y + y_step * i_roi_edge; // the current y-position
+			// if this is the very first sample point, draw an arrow in the center of the selection area
+			if (y_step + x_step == 0) {
+				// draw an arrow overlay that will be reused:
+				if (arrownum==1){
+				if (getBoolean("Do you want to draw lines through the sample? "))
+					linenum=getNumber("How many lines do you want through the area (allowed 1,3 or 5)?", linenum);{
+					if (linenum==1) {makeLine(x , y + i_roi_edge / 2, x + i_roi_edge, y + i_roi_edge / 2);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();}
+					if (linenum==3) {makeLine(x , y + i_roi_edge / 2, x + i_roi_edge, y + i_roi_edge / 2);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();
+									makeLine(x , y + i_roi_edge / 6, x + i_roi_edge, y + i_roi_edge / 6);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();
+									makeLine(x , y + 5*i_roi_edge / 6, x + i_roi_edge, y + 5*i_roi_edge / 6);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();}
+					if (linenum==5)	{makeLine(x , y + i_roi_edge / 2, x + i_roi_edge, y + i_roi_edge / 2);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();
+									makeLine(x , y + i_roi_edge / 6, x + i_roi_edge, y + i_roi_edge / 6);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();
+									makeLine(x , y + 2*i_roi_edge / 6, x + i_roi_edge, y + 2*i_roi_edge / 6);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();
+									makeLine(x , y + 4*i_roi_edge / 6, x + i_roi_edge, y + 4*i_roi_edge / 6);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();
+									makeLine(x , y + 5*i_roi_edge / 6, x + i_roi_edge, y + 5*i_roi_edge / 6);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();}
+				}
+				makeArrow(x + i_roi_edge / 2, y + 3 * i_roi_edge / 4, x + i_roi_edge / 2, y + i_roi_edge / 2, "Filled Small");
+				Roi.setStrokeColor(arrow_color);
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();}
+				
+				else if (arrownum==2){
+				if (getBoolean("Do you want to draw lines through the sample? "))
+					linenum=getNumber("How many lines do you want through the area (allowed 1,3 or 5)?", linenum);{
+					if (linenum==1) {makeLine(x , y + i_roi_edge / 2, x + i_roi_edge, y + i_roi_edge / 2);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();}
+					if (linenum==3) {makeLine(x , y + i_roi_edge / 2, x + i_roi_edge, y + i_roi_edge / 2);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();
+									makeLine(x , y + i_roi_edge / 6, x + i_roi_edge, y + i_roi_edge / 6);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();
+									makeLine(x , y + 5*i_roi_edge / 6, x + i_roi_edge, y + 5*i_roi_edge / 6);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();}
+					if (linenum==5)	{makeLine(x , y + i_roi_edge / 2, x + i_roi_edge, y + i_roi_edge / 2);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();
+									makeLine(x , y + i_roi_edge / 6, x + i_roi_edge, y + i_roi_edge / 6);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();
+									makeLine(x , y + 2*i_roi_edge / 6, x + i_roi_edge, y + 2*i_roi_edge / 6);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();
+									makeLine(x , y + 4*i_roi_edge / 6, x + i_roi_edge, y + 4*i_roi_edge / 6);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();
+									makeLine(x , y + 5*i_roi_edge / 6, x + i_roi_edge, y + 5*i_roi_edge / 6);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();}
+				}
+				makeArrow(x+i_roi_edge /4, y + 3 * i_roi_edge / 4, x+i_roi_edge /4 , y + i_roi_edge / 2, "Filled Small");
+				Roi.setStrokeColor(arrow_color);
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();
+				makeArrow(x + 3*i_roi_edge/4, y + 3 * i_roi_edge / 4, x + 3*i_roi_edge/4, y + i_roi_edge / 2, "Filled Small");
+				Roi.setStrokeColor(arrow_color);
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();
+				}
+				
+				else if (arrownum==4){
+				if (getBoolean("Do you want to draw lines through the sample? "))
+					linenum=getNumber("How many lines do you want through the area (allowed 1,3 or 5)?", linenum);{
+					if (linenum==1) {makeLine(x , y + i_roi_edge / 2, x + i_roi_edge, y + i_roi_edge / 2);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();}
+					if (linenum==3) {makeLine(x , y + i_roi_edge / 2, x + i_roi_edge, y + i_roi_edge / 2);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();
+									makeLine(x , y + i_roi_edge / 6, x + i_roi_edge, y + i_roi_edge / 6);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();
+									makeLine(x , y + 5*i_roi_edge / 6, x + i_roi_edge, y + 5*i_roi_edge / 6);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();}
+					if (linenum==5)	{makeLine(x , y + i_roi_edge / 2, x + i_roi_edge, y + i_roi_edge / 2);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();
+									makeLine(x , y + i_roi_edge / 6, x + i_roi_edge, y + i_roi_edge / 6);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();
+									makeLine(x , y + 2*i_roi_edge / 6, x + i_roi_edge, y + 2*i_roi_edge / 6);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();
+									makeLine(x , y + 4*i_roi_edge / 6, x + i_roi_edge, y + 4*i_roi_edge / 6);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();
+									makeLine(x , y + 5*i_roi_edge / 6, x + i_roi_edge, y + 5*i_roi_edge / 6);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();}
+				}
+				makeArrow(x+i_roi_edge /4 , y + 1*i_roi_edge / 3, x+i_roi_edge / 4 , y + 1*i_roi_edge / 4, "Filled Small");
+				Roi.setStrokeColor(arrow_color);
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();
+				makeArrow( x + 3*i_roi_edge/4 , y + 1 * i_roi_edge / 3, x + 3*i_roi_edge/4, y + 1*i_roi_edge / 4, "Filled Small");
+				Roi.setStrokeColor(arrow_color);
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();	
+				makeArrow(x+i_roi_edge /4 , y + 2 * i_roi_edge / 3, x+i_roi_edge /4 , y + 3*i_roi_edge/4, "Filled Small");
+				Roi.setStrokeColor(arrow_color);
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();
+				makeArrow(x + 3*i_roi_edge/4, y + 2 * i_roi_edge / 3,x + 3*i_roi_edge/4, y + 3*i_roi_edge/4, "Filled Small");
+				Roi.setStrokeColor(arrow_color);
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();	}
+
+				else if (arrownum==8){
+					if (getBoolean("Do you want to draw lines through the sample? "))
+					linenum=getNumber("How many lines do you want through the area (allowed 1,3 or 5)?", linenum);{
+					if (linenum==1) {makeLine(x , y + i_roi_edge / 2, x + i_roi_edge, y + i_roi_edge / 2);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();}
+					if (linenum==3) {makeLine(x , y + i_roi_edge / 2, x + i_roi_edge, y + i_roi_edge / 2);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();
+									makeLine(x , y + i_roi_edge / 6, x + i_roi_edge, y + i_roi_edge / 6);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();
+									makeLine(x , y + 5*i_roi_edge / 6, x + i_roi_edge, y + 5*i_roi_edge / 6);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();}
+					if (linenum==5)	{makeLine(x , y + i_roi_edge / 2, x + i_roi_edge, y + i_roi_edge / 2);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();
+									makeLine(x , y + i_roi_edge / 6, x + i_roi_edge, y + i_roi_edge / 6);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();
+									makeLine(x , y + 2*i_roi_edge / 6, x + i_roi_edge, y + 2*i_roi_edge / 6);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();
+									makeLine(x , y + 4*i_roi_edge / 6, x + i_roi_edge, y + 4*i_roi_edge / 6);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();
+									makeLine(x , y + 5*i_roi_edge / 6, x + i_roi_edge, y + 5*i_roi_edge / 6);
+									Roi.setStrokeColor("green");
+									Roi.setStrokeWidth(2);
+									Overlay.addSelection();}
+				}
+				makeArrow(x+i_roi_edge /8 , y + 1*i_roi_edge / 3, x+i_roi_edge / 8 , y + 1*i_roi_edge / 4, "Filled Small");
+				Roi.setStrokeColor(arrow_color);
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();
+				makeArrow(x + 3*i_roi_edge / 8, y + 1 * i_roi_edge / 3, x +3* i_roi_edge / 8, y + 1*i_roi_edge / 4 , "Filled Small");
+				Roi.setStrokeColor(arrow_color);
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();	
+				makeArrow(x + 5*i_roi_edge / 8, y +  i_roi_edge / 3, x + 5*i_roi_edge /8, y + 1*i_roi_edge / 4 , "Filled Small");
+				Roi.setStrokeColor(arrow_color);
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();
+				makeArrow(x + 7*i_roi_edge/8, y + i_roi_edge / 3, x + 7*i_roi_edge/8, y + 1*i_roi_edge / 4 , "Filled Small");
+				Roi.setStrokeColor(arrow_color);
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();	
+				makeArrow(x+i_roi_edge /8 , y + 2*i_roi_edge / 3, x+i_roi_edge / 8 , y + 3*i_roi_edge / 4, "Filled Small");
+				Roi.setStrokeColor(arrow_color);
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();
+				makeArrow(x + 3*i_roi_edge / 8, y +  2*i_roi_edge / 3, x +3* i_roi_edge / 8, y + 3*i_roi_edge / 4 , "Filled Small");
+				Roi.setStrokeColor(arrow_color);
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();	
+				makeArrow(x + 5*i_roi_edge / 8, y +  2*i_roi_edge / 3, x + 5*i_roi_edge /8, y + 3*i_roi_edge / 4 , "Filled Small");
+				Roi.setStrokeColor(arrow_color);
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();
+				makeArrow(x + 7*i_roi_edge/8, y +  2*i_roi_edge / 3, x + 7*i_roi_edge/8, y + 3*i_roi_edge / 4 , "Filled Small");
+				Roi.setStrokeColor(arrow_color);
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();	
+				}
+
+			}
+			else {
+				// move the arrow overlay to the current position
+				if (arrownum==1) {	if (linenum==1)			{Overlay.moveSelection(0, x, y + i_roi_edge / 2);Overlay.moveSelection(1, x + i_roi_edge / 2, y + i_roi_edge / 2);	}
+									else if (linenum==3) 	{Overlay.moveSelection(0, x, y + i_roi_edge / 2);	
+															Overlay.moveSelection(1, x, y + i_roi_edge / 6);
+															Overlay.moveSelection(2, x, y + 5*i_roi_edge / 6);Overlay.moveSelection(3, x + i_roi_edge / 2, y + i_roi_edge / 2);}	
+									else if (linenum==5)	{Overlay.moveSelection(0, x, y + i_roi_edge / 2);	
+															Overlay.moveSelection(1, x, y + i_roi_edge / 6);	
+															Overlay.moveSelection(2, x, y + 2*i_roi_edge / 6);	
+															Overlay.moveSelection(3, x, y + 4*i_roi_edge / 6);
+															Overlay.moveSelection(4, x, y + 5*i_roi_edge / 6);Overlay.moveSelection(5, x + i_roi_edge / 2, y + i_roi_edge / 2);}
+									else					Overlay.moveSelection(0, x + i_roi_edge / 2, y + i_roi_edge / 2);}
+
+				else if (arrownum==2) {if (linenum==1)	{Overlay.moveSelection(0, x, y + i_roi_edge / 2);
+										Overlay.moveSelection(1,x+i_roi_edge /4 , y + i_roi_edge / 2);
+										Overlay.moveSelection(2, x+3*i_roi_edge /4, y + i_roi_edge / 2);
+										Overlay.moveSelection(3, x+i_roi_edge /4 , y + i_roi_edge / 2);
+										Overlay.moveSelection(4, x+3*i_roi_edge /4, y + i_roi_edge / 2);
+										Overlay.moveSelection(5, x+i_roi_edge /4 , y + i_roi_edge / 2);
+										Overlay.moveSelection(6, x+3*i_roi_edge /4, y + i_roi_edge / 2);}
+										else if (linenum==3) {Overlay.moveSelection(0, x, y + i_roi_edge / 2);	
+										Overlay.moveSelection(1, x, y + i_roi_edge / 6);
+										Overlay.moveSelection(2, x, y + 5*i_roi_edge / 6);
+										Overlay.moveSelection(3,x+i_roi_edge /4 , y + i_roi_edge / 2);
+										Overlay.moveSelection(4, x+3*i_roi_edge /4, y + i_roi_edge / 2);
+										Overlay.moveSelection(5, x+i_roi_edge /4 , y + i_roi_edge / 2);
+										Overlay.moveSelection(6, x+3*i_roi_edge /4, y + i_roi_edge / 2);
+										Overlay.moveSelection(7, x+i_roi_edge /4 , y + i_roi_edge / 2);
+										Overlay.moveSelection(8, x+3*i_roi_edge /4, y + i_roi_edge / 2);}
+										else if (linenum==5) {Overlay.moveSelection(0, x, y + i_roi_edge / 2);	
+										Overlay.moveSelection(1, x, y + i_roi_edge / 6);	
+										Overlay.moveSelection(2, x, y + 2*i_roi_edge / 6);	
+										Overlay.moveSelection(3, x, y + 4*i_roi_edge / 6);
+										Overlay.moveSelection(4, x, y + 5*i_roi_edge / 6);
+										Overlay.moveSelection(5,x+i_roi_edge /4 , y + i_roi_edge / 2);
+										Overlay.moveSelection(6, x+3*i_roi_edge /4, y + i_roi_edge / 2);
+										Overlay.moveSelection(7, x+i_roi_edge /4 , y + i_roi_edge / 2);
+										Overlay.moveSelection(8, x+3*i_roi_edge /4, y + i_roi_edge / 2);
+										Overlay.moveSelection(9, x+i_roi_edge /4 , y + i_roi_edge / 2);
+										Overlay.moveSelection(10, x+3*i_roi_edge /4, y + i_roi_edge / 2);}
+										else {Overlay.moveSelection(0,x+i_roi_edge /4 , y + i_roi_edge / 2);
+										Overlay.moveSelection(1, x+3*i_roi_edge /4, y + i_roi_edge / 2);
+										Overlay.moveSelection(2, x+i_roi_edge /4 , y + i_roi_edge / 2);
+										Overlay.moveSelection(3, x+3*i_roi_edge /4, y + i_roi_edge / 2);
+										Overlay.moveSelection(4, x+i_roi_edge /4 , y + i_roi_edge / 2);
+										Overlay.moveSelection(5, x+3*i_roi_edge /4, y + i_roi_edge / 2);}}
+										
+				else if (arrownum==4)	 {if (linenum==1)	{Overlay.moveSelection(0, x, y + i_roi_edge / 2);
+										Overlay.moveSelection(1,x+i_roi_edge /4 , y + 1*i_roi_edge / 4 );
+										Overlay.moveSelection(2,x+3*i_roi_edge /4,y + 1*i_roi_edge / 4 );
+										Overlay.moveSelection(3,x+i_roi_edge /4 , y + 2 * i_roi_edge / 3);
+										Overlay.moveSelection(4,x+3*i_roi_edge /4, y + 2 * i_roi_edge / 3);
+										Overlay.moveSelection(5,x+i_roi_edge /4 , y + 1*i_roi_edge / 4 );
+										Overlay.moveSelection(6,x+i_roi_edge /4 , y + 1*i_roi_edge / 4 );
+										Overlay.moveSelection(7, x+3*i_roi_edge /4, y + 1*i_roi_edge / 4 );
+										Overlay.moveSelection(8, x+3*i_roi_edge /4, y + 1*i_roi_edge / 4 );
+										Overlay.moveSelection(9, x+i_roi_edge /4 , y + 2 * i_roi_edge / 3);
+										Overlay.moveSelection(10, x+i_roi_edge /4 , y + 2 * i_roi_edge / 3);
+										Overlay.moveSelection(11,x+3*i_roi_edge /4, y + 2 * i_roi_edge / 3);
+										Overlay.moveSelection(12,x+3*i_roi_edge /4, y + 2 * i_roi_edge / 3);}
+										else if (linenum==3){Overlay.moveSelection(0, x, y + i_roi_edge / 2);	
+										Overlay.moveSelection(1, x, y + i_roi_edge / 6);
+										Overlay.moveSelection(2, x, y + 5*i_roi_edge / 6);
+										Overlay.moveSelection(3,x+i_roi_edge /4, y + 1*i_roi_edge / 4 );
+										Overlay.moveSelection(4,x+3*i_roi_edge /4,y + 1*i_roi_edge / 4 );
+										Overlay.moveSelection(5,x+i_roi_edge /4 , y + 2 * i_roi_edge / 3);
+										Overlay.moveSelection(6,x+3*i_roi_edge /4, y + 2 * i_roi_edge / 3);
+										Overlay.moveSelection(7,x+i_roi_edge /4 , y + 1*i_roi_edge / 4 );
+										Overlay.moveSelection(8,x+i_roi_edge /4 , y + 1*i_roi_edge / 4 );
+										Overlay.moveSelection(9, x+3*i_roi_edge /4, y + 1*i_roi_edge / 4 );
+										Overlay.moveSelection(10, x+3*i_roi_edge /4, y + 1*i_roi_edge / 4 );
+										Overlay.moveSelection(11, x+i_roi_edge /4 , y + 2 * i_roi_edge / 3);
+										Overlay.moveSelection(12, x+i_roi_edge /4 , y + 2 * i_roi_edge / 3);
+										Overlay.moveSelection(13,x+3*i_roi_edge /4, y + 2 * i_roi_edge / 3);
+										Overlay.moveSelection(14,x+3*i_roi_edge /4, y + 2 * i_roi_edge / 3);}
+										else if (linenum==5) {Overlay.moveSelection(0, x, y + i_roi_edge / 2);	
+										Overlay.moveSelection(1, x, y + i_roi_edge / 6);	
+										Overlay.moveSelection(2, x, y + 2*i_roi_edge / 6);	
+										Overlay.moveSelection(3, x, y + 4*i_roi_edge / 6);
+										Overlay.moveSelection(4, x, y + 5*i_roi_edge / 6);
+										Overlay.moveSelection(5,x+i_roi_edge /4 , y + 1*i_roi_edge / 4 );
+										Overlay.moveSelection(6,x+3*i_roi_edge /4,y + 1*i_roi_edge / 4 );
+										Overlay.moveSelection(7,x+i_roi_edge /4, y + 2 * i_roi_edge / 3);
+										Overlay.moveSelection(8,x+3*i_roi_edge /4, y + 2 * i_roi_edge / 3);
+										Overlay.moveSelection(9,x+i_roi_edge /4 , y + 1*i_roi_edge / 4 );
+										Overlay.moveSelection(10,x+i_roi_edge /4 , y + 1*i_roi_edge / 4 );
+										Overlay.moveSelection(11, x+3*i_roi_edge /4, y + 1*i_roi_edge / 4 );
+										Overlay.moveSelection(12, x+3*i_roi_edge /4, y + 1*i_roi_edge / 4 );
+										Overlay.moveSelection(13, x+i_roi_edge /4 , y + 2 * i_roi_edge / 3);
+										Overlay.moveSelection(14, x+i_roi_edge /4 , y + 2 * i_roi_edge / 3);
+										Overlay.moveSelection(15,x+3*i_roi_edge /4, y + 2 * i_roi_edge / 3);
+										Overlay.moveSelection(16,x+3*i_roi_edge /4, y + 2 * i_roi_edge / 3);}
+										else {Overlay.moveSelection(0,x+i_roi_edge /4 , y + 1*i_roi_edge / 4 );
+										Overlay.moveSelection(1,x+3*i_roi_edge /4,y + 1*i_roi_edge / 4 );
+										Overlay.moveSelection(2,x+i_roi_edge /4 , y + 2 * i_roi_edge / 3);
+										Overlay.moveSelection(3,x+3*i_roi_edge /4, y + 2 * i_roi_edge / 3);
+										Overlay.moveSelection(4,x+i_roi_edge /4 , y + 1*i_roi_edge / 4 );
+										Overlay.moveSelection(5,x+i_roi_edge /4 , y + 1*i_roi_edge / 4 );
+										Overlay.moveSelection(6, x+3*i_roi_edge /4, y + 1*i_roi_edge / 4 );
+										Overlay.moveSelection(7, x+3*i_roi_edge /4, y + 1*i_roi_edge / 4 );
+										Overlay.moveSelection(8, x+i_roi_edge /4 , y + 2 * i_roi_edge / 3);
+										Overlay.moveSelection(9, x+i_roi_edge /4 , y + 2 * i_roi_edge / 3);
+										Overlay.moveSelection(10,x+3*i_roi_edge /4, y + 2 * i_roi_edge / 3);
+										Overlay.moveSelection(11,x+3*i_roi_edge /4, y + 2 * i_roi_edge / 3);}}
+										
+										
+				else if (arrownum==8)	{if (linenum==1)	{Overlay.moveSelection(0, x, y + i_roi_edge / 2);
+										Overlay.moveSelection(1, x + i_roi_edge/8 , y + 1*i_roi_edge / 4);
+										Overlay.moveSelection(2, x + 3*i_roi_edge/8, y + 1*i_roi_edge / 4 );
+										Overlay.moveSelection(3, x + 5*i_roi_edge/8, y + 1*i_roi_edge / 4);
+										Overlay.moveSelection(4, x + 7*i_roi_edge/8, y + 1*i_roi_edge / 4);
+										Overlay.moveSelection(5, x + i_roi_edge/8, y + 2*i_roi_edge/3 );
+										Overlay.moveSelection(6, x + 3*i_roi_edge/8, y + 2*i_roi_edge/3);
+										Overlay.moveSelection(7, x + 5*i_roi_edge/8, y + 2*i_roi_edge/3);
+										Overlay.moveSelection(8, x + 7*i_roi_edge/8, y + 2*i_roi_edge/3 );}
+										else if (linenum==3) {Overlay.moveSelection(0, x, y + i_roi_edge / 2);	
+										Overlay.moveSelection(1, x, y + i_roi_edge / 6);
+										Overlay.moveSelection(2, x, y + 5*i_roi_edge / 6);
+										Overlay.moveSelection(3, x + i_roi_edge/8 , y + 1*i_roi_edge / 4);
+										Overlay.moveSelection(4, x + 3*i_roi_edge/8, y + 1*i_roi_edge / 4 );
+										Overlay.moveSelection(5, x + 5*i_roi_edge/8, y + 1*i_roi_edge / 4);
+										Overlay.moveSelection(6, x + 7*i_roi_edge/8, y + 1*i_roi_edge / 4);
+										Overlay.moveSelection(7, x + i_roi_edge/8, y + 2*i_roi_edge/3 );
+										Overlay.moveSelection(8, x + 3*i_roi_edge/8, y + 2*i_roi_edge/3);
+										Overlay.moveSelection(9, x + 5*i_roi_edge/8, y + 2*i_roi_edge/3);
+										Overlay.moveSelection(10, x + 7*i_roi_edge/8, y + 2*i_roi_edge/3 );}
+										else if (linenum==5) {Overlay.moveSelection(0, x, y + i_roi_edge / 2);	
+										Overlay.moveSelection(1, x, y + i_roi_edge / 6);	
+										Overlay.moveSelection(2, x, y + 2*i_roi_edge / 6);	
+										Overlay.moveSelection(3, x, y + 4*i_roi_edge / 6);
+										Overlay.moveSelection(4, x, y + 5*i_roi_edge / 6);
+										Overlay.moveSelection(5, x + i_roi_edge/8 , y + 1*i_roi_edge / 4);
+										Overlay.moveSelection(6, x + 3*i_roi_edge/8, y + 1*i_roi_edge / 4 );
+										Overlay.moveSelection(7, x + 5*i_roi_edge/8, y + 1*i_roi_edge / 4);
+										Overlay.moveSelection(8, x + 7*i_roi_edge/8, y + 1*i_roi_edge / 4);
+										Overlay.moveSelection(9, x + i_roi_edge/8, y + 2*i_roi_edge/3 );
+										Overlay.moveSelection(10, x + 3*i_roi_edge/8, y + 2*i_roi_edge/3);
+										Overlay.moveSelection(11, x + 5*i_roi_edge/8, y + 2*i_roi_edge/3);
+										Overlay.moveSelection(12, x + 7*i_roi_edge/8, y + 2*i_roi_edge/3 );}
+										else {Overlay.moveSelection(0, x + i_roi_edge/8 , y + 1*i_roi_edge / 4);
+										Overlay.moveSelection(1, x + 3*i_roi_edge/8, y + 1*i_roi_edge / 4 );
+										Overlay.moveSelection(2, x + 5*i_roi_edge/8, y + 1*i_roi_edge / 4);
+										Overlay.moveSelection(3, x + 7*i_roi_edge/8, y + 1*i_roi_edge / 4);
+										Overlay.moveSelection(4, x + i_roi_edge/8, y + 2*i_roi_edge/3 );
+										Overlay.moveSelection(5, x + 3*i_roi_edge/8, y + 2*i_roi_edge/3);
+										Overlay.moveSelection(6, x + 5*i_roi_edge/8, y + 2*i_roi_edge/3);
+										Overlay.moveSelection(7, x + 7*i_roi_edge/8, y + 2*i_roi_edge/3 );}}
+										
+										
+			}
+			// select a rectangle prompt the user if arrow point over aggregate
+			makeRectangle(x, y, i_roi_edge, i_roi_edge);
+			run("To Selection");
+				
+if (arrownum==1){
+			waitForUser("Pause", "Press OK to resume"); 
+ 
+if (phasenum==1) temp=getNumber("If the arrow pointing on " +temp1+ " press [1]", temp);
+else if (phasenum==2) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2]?", temp);
+else if (phasenum==3) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], "+temp2+ " [2], or " +temp3+ " [3]?", temp);
+else if (phasenum==4) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], "+temp2+ " [2], " +temp3+ " [3], or " +temp4+ " [4]?", temp);
+else if (phasenum==5) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], or " +temp5+ " [5]?", temp);
+else if (phasenum==6) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], or " +temp6+ " [6]?", temp);
+else if (phasenum==7) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], or " +temp7+ " [7]?", temp);
+else if (phasenum==8) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], " +temp7+ " [7], or " +temp8+ " [8]?", temp);	
+else if (phasenum==9) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], " +temp7+ " [7], " +temp8+ " [8], or " +temp9+ " [9]?", temp); 
+				if (temp==1) temp1c++;
+				else if (temp==2) temp2c++;
+				else if (temp==3) temp3c++;
+				else if (temp==4) temp4c++;
+				else if (temp==5) temp5c++;
+				else if (temp==6) temp6c++;
+				else if (temp==7) temp7c++;
+				else if (temp==8) temp8c++;
+				else if (temp==9) temp9c++;
+if (linenum!=0) {char=getString("Hit key to represent crossing of phase. When done hit 'enter'.", ' '); tempc=lengthOf(char); phase+=tempc; showMessage("The phase was counted " +tempc+ " times.");}
+			Count++;}
+			
+			else if (arrownum==2){waitForUser("Pause", "Press OK to resume");
+				makeArrow(x+i_roi_edge /4, y + 3 * i_roi_edge / 4, x+i_roi_edge /4 , y + i_roi_edge / 2, "Filled Small");
+				Roi.setStrokeColor("red");
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();
+ 
+if (phasenum==1) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1]", temp);
+else if (phasenum==2) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2]?", temp);
+else if (phasenum==3) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], "+temp2+ " [2], or " +temp3+ " [3]?", temp);
+else if (phasenum==4) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], "+temp2+ " [2], " +temp3+ " [3], or " +temp4+ " [4]?", temp);
+else if (phasenum==5) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], or " +temp5+ " [5]?", temp);
+else if (phasenum==6) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], or " +temp6+ " [6]?", temp);
+else if (phasenum==7) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], or " +temp7+ " [7]?", temp);
+else if (phasenum==8) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], " +temp7+ " [7], or " +temp8+ " [8]?", temp);	
+else if (phasenum==9) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], " +temp7+ " [7], " +temp8+ " [8], or " +temp9+ " [9]?", temp); 
+				if (temp==1) temp1c++;
+				else if (temp==2) temp2c++;
+				else if (temp==3) temp3c++;
+				else if (temp==4) temp4c++;
+				else if (temp==5) temp5c++;
+				else if (temp==6) temp6c++;
+				else if (temp==7) temp7c++;
+				else if (temp==8) temp8c++;
+				else if (temp==9) temp9c++;
+				makeArrow(x + 3*i_roi_edge/4, y + 3 * i_roi_edge / 4, x + 3*i_roi_edge/4, y + i_roi_edge / 2, "Filled Small");
+				Roi.setStrokeColor("red");
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();
+				makeArrow(x+i_roi_edge /4, y + 3 * i_roi_edge / 4, x+i_roi_edge /4 , y + i_roi_edge / 2, "Filled Small");
+				Roi.setStrokeColor(arrow_color);
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();
+ 
+if (phasenum==1) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1]", temp);
+else if (phasenum==2) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2]?", temp);
+else if (phasenum==3) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], "+temp2+ " [2], or " +temp3+ " [3]?", temp);
+else if (phasenum==4) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], "+temp2+ " [2], " +temp3+ " [3], or " +temp4+ " [4]?", temp);
+else if (phasenum==5) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], or " +temp5+ " [5]?", temp);
+else if (phasenum==6) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], or " +temp6+ " [6]?", temp);
+else if (phasenum==7) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], or " +temp7+ " [7]?", temp);
+else if (phasenum==8) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], " +temp7+ " [7], or " +temp8+ " [8]?", temp);	
+else if (phasenum==9) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], " +temp7+ " [7], " +temp8+ " [8], or " +temp9+ " [9]?", temp); 
+				if (temp==1) temp1c++;
+				else if (temp==2) temp2c++;
+				else if (temp==3) temp3c++;
+				else if (temp==4) temp4c++;
+				else if (temp==5) temp5c++;
+				else if (temp==6) temp6c++;
+				else if (temp==7) temp7c++;
+				else if (temp==8) temp8c++;
+				else if (temp==9) temp9c++;
+				makeArrow(x + 3*i_roi_edge/4, y + 3 * i_roi_edge / 4, x + 3*i_roi_edge/4, y + i_roi_edge / 2, "Filled Small");
+				Roi.setStrokeColor(arrow_color);
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();
+				makeRectangle(x , y ,  i_roi_edge,  i_roi_edge);
+				if (linenum!=0) {char=getString("Hit key to represent crossing of phase. When done hit 'enter'.", ' '); tempc=lengthOf(char); phase+=tempc; showMessage("The phase was counted " +tempc+ " times.");}
+				Count++;}
+			
+			else if (arrownum==4){waitForUser("Pause", "Press OK to resume");
+				makeArrow(x+i_roi_edge /4 , y + 1*i_roi_edge / 3, x+i_roi_edge / 4 , y + 1*i_roi_edge / 4, "Filled Small");
+				Roi.setStrokeColor("red");
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();
+	 
+if (phasenum==1) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1]", temp);
+else if (phasenum==2) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2]?", temp);
+else if (phasenum==3) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], "+temp2+ " [2], or " +temp3+ " [3]?", temp);
+else if (phasenum==4) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], "+temp2+ " [2], " +temp3+ " [3], or " +temp4+ " [4]?", temp);
+else if (phasenum==5) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], or " +temp5+ " [5]?", temp);
+else if (phasenum==6) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], or " +temp6+ " [6]?", temp);
+else if (phasenum==7) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], or " +temp7+ " [7]?", temp);
+else if (phasenum==8) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], " +temp7+ " [7], or " +temp8+ " [8]?", temp);	
+else if (phasenum==9) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], " +temp7+ " [7], " +temp8+ " [8], or " +temp9+ " [9]?", temp); 
+				if (temp==1) temp1c++;
+				else if (temp==2) temp2c++;
+				else if (temp==3) temp3c++;
+				else if (temp==4) temp4c++;
+				else if (temp==5) temp5c++;
+				else if (temp==6) temp6c++;
+				else if (temp==7) temp7c++;
+				else if (temp==8) temp8c++;
+				else if (temp==9) temp9c++;
+				makeArrow(x+i_roi_edge /4 , y + 1*i_roi_edge / 3, x+i_roi_edge / 4 , y + 1*i_roi_edge / 4, "Filled Small");
+				Roi.setStrokeColor(arrow_color);
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();
+				makeArrow( x + 3*i_roi_edge/4 , y + 1 * i_roi_edge / 3, x + 3*i_roi_edge/4, y + 1*i_roi_edge / 4, "Filled Small");
+				Roi.setStrokeColor("red");
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();
+	 
+if (phasenum==1) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1]", temp);
+else if (phasenum==2) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2]?", temp);
+else if (phasenum==3) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], "+temp2+ " [2], or " +temp3+ " [3]?", temp);
+else if (phasenum==4) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], "+temp2+ " [2], " +temp3+ " [3], or " +temp4+ " [4]?", temp);
+else if (phasenum==5) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], or " +temp5+ " [5]?", temp);
+else if (phasenum==6) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], or " +temp6+ " [6]?", temp);
+else if (phasenum==7) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], or " +temp7+ " [7]?", temp);
+else if (phasenum==8) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], " +temp7+ " [7], or " +temp8+ " [8]?", temp);	
+else if (phasenum==9) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], " +temp7+ " [7], " +temp8+ " [8], or " +temp9+ " [9]?", temp); 
+				if (temp==1) temp1c++;
+				else if (temp==2) temp2c++;
+				else if (temp==3) temp3c++;
+				else if (temp==4) temp4c++;
+				else if (temp==5) temp5c++;
+				else if (temp==6) temp6c++;
+				else if (temp==7) temp7c++;
+				else if (temp==8) temp8c++;
+				else if (temp==9) temp9c++;
+				makeArrow( x + 3*i_roi_edge/4 , y + 1 * i_roi_edge / 3, x + 3*i_roi_edge/4, y + 1*i_roi_edge / 4, "Filled Small");
+				Roi.setStrokeColor(arrow_color);
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();	
+				makeArrow(x+i_roi_edge /4 , y + 2 * i_roi_edge / 3, x+i_roi_edge /4 , y + 3*i_roi_edge/4, "Filled Small");
+				Roi.setStrokeColor("red");
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();
+ 
+if (phasenum==1) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1]", temp);
+else if (phasenum==2) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2]?", temp);
+else if (phasenum==3) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], "+temp2+ " [2], or " +temp3+ " [3]?", temp);
+else if (phasenum==4) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], "+temp2+ " [2], " +temp3+ " [3], or " +temp4+ " [4]?", temp);
+else if (phasenum==5) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], or " +temp5+ " [5]?", temp);
+else if (phasenum==6) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], or " +temp6+ " [6]?", temp);
+else if (phasenum==7) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], or " +temp7+ " [7]?", temp);
+else if (phasenum==8) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], " +temp7+ " [7], or " +temp8+ " [8]?", temp);	
+else if (phasenum==9) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], " +temp7+ " [7], " +temp8+ " [8], or " +temp9+ " [9]?", temp); 
+				if (temp==1) temp1c++;
+				else if (temp==2) temp2c++;
+				else if (temp==3) temp3c++;
+				else if (temp==4) temp4c++;
+				else if (temp==5) temp5c++;
+				else if (temp==6) temp6c++;
+				else if (temp==7) temp7c++;
+				else if (temp==8) temp8c++;
+				else if (temp==9) temp9c++;
+				makeArrow(x+i_roi_edge /4 , y + 2 * i_roi_edge / 3, x+i_roi_edge /4 , y + 3*i_roi_edge/4, "Filled Small");
+				Roi.setStrokeColor(arrow_color);
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();
+				makeArrow(x + 3*i_roi_edge/4, y + 2 * i_roi_edge / 3,x + 3*i_roi_edge/4, y + 3*i_roi_edge/4, "Filled Small");
+				Roi.setStrokeColor("red");
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();
+ 
+if (phasenum==1) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1]", temp);
+else if (phasenum==2) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2]?", temp);
+else if (phasenum==3) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], "+temp2+ " [2], or " +temp3+ " [3]?", temp);
+else if (phasenum==4) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], "+temp2+ " [2], " +temp3+ " [3], or " +temp4+ " [4]?", temp);
+else if (phasenum==5) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], or " +temp5+ " [5]?", temp);
+else if (phasenum==6) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], or " +temp6+ " [6]?", temp);
+else if (phasenum==7) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], or " +temp7+ " [7]?", temp);
+else if (phasenum==8) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], " +temp7+ " [7], or " +temp8+ " [8]?", temp);	
+else if (phasenum==9) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], " +temp7+ " [7], " +temp8+ " [8], or " +temp9+ " [9]?", temp); 
+				if (temp==1) temp1c++;
+				else if (temp==2) temp2c++;
+				else if (temp==3) temp3c++;
+				else if (temp==4) temp4c++;
+				else if (temp==5) temp5c++;
+				else if (temp==6) temp6c++;
+				else if (temp==7) temp7c++;
+				else if (temp==8) temp8c++;
+				else if (temp==9) temp9c++;
+				makeArrow(x + 3*i_roi_edge/4, y + 2 * i_roi_edge / 3,x + 3*i_roi_edge/4, y + 3*i_roi_edge/4, "Filled Small");
+				Roi.setStrokeColor(arrow_color);
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();
+				makeRectangle(x, y , i_roi_edge, i_roi_edge);
+				if (linenum!=0) {char=getString("Hit key to represent crossing of phase. When done hit 'enter'.", ' '); tempc=lengthOf(char); phase+=tempc; showMessage("The phase was counted " +tempc+ " times.");}
+				Count++;}
+
+			else if (arrownum==8){waitForUser("Pause", "Press OK to resume");
+				makeArrow(x+i_roi_edge /8 , y + 1*i_roi_edge / 3, x+i_roi_edge / 8 , y + 1*i_roi_edge / 4, "Filled Small");
+				Roi.setStrokeColor("red");
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();
+ 
+if (phasenum==1) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1]", temp);
+else if (phasenum==2) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2]?", temp);
+else if (phasenum==3) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], "+temp2+ " [2], or " +temp3+ " [3]?", temp);
+else if (phasenum==4) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], "+temp2+ " [2], " +temp3+ " [3], or " +temp4+ " [4]?", temp);
+else if (phasenum==5) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], or " +temp5+ " [5]?", temp);
+else if (phasenum==6) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], or " +temp6+ " [6]?", temp);
+else if (phasenum==7) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], or " +temp7+ " [7]?", temp);
+else if (phasenum==8) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], " +temp7+ " [7], or " +temp8+ " [8]?", temp);	
+else if (phasenum==9) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], " +temp7+ " [7], " +temp8+ " [8], or " +temp9+ " [9]?", temp); 
+				if (temp==1) temp1c++;
+				else if (temp==2) temp2c++;
+				else if (temp==3) temp3c++;
+				else if (temp==4) temp4c++;
+				else if (temp==5) temp5c++;
+				else if (temp==6) temp6c++;
+				else if (temp==7) temp7c++;
+				else if (temp==8) temp8c++;
+				else if (temp==9) temp9c++;
+				makeArrow(x+i_roi_edge /8 , y + 1*i_roi_edge / 3, x+i_roi_edge / 8 , y + 1*i_roi_edge / 4, "Filled Small");
+				Roi.setStrokeColor(arrow_color);
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();
+				makeArrow(x + 3*i_roi_edge / 8, y + 1 * i_roi_edge / 3, x +3* i_roi_edge / 8, y + 1*i_roi_edge / 4 , "Filled Small");
+				Roi.setStrokeColor("red");
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();	
+		 
+if (phasenum==1) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1]", temp);
+else if (phasenum==2) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2]?", temp);
+else if (phasenum==3) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], "+temp2+ " [2], or " +temp3+ " [3]?", temp);
+else if (phasenum==4) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], "+temp2+ " [2], " +temp3+ " [3], or " +temp4+ " [4]?", temp);
+else if (phasenum==5) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], or " +temp5+ " [5]?", temp);
+else if (phasenum==6) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], or " +temp6+ " [6]?", temp);
+else if (phasenum==7) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], or " +temp7+ " [7]?", temp);
+else if (phasenum==8) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], " +temp7+ " [7], or " +temp8+ " [8]?", temp);	
+else if (phasenum==9) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], " +temp7+ " [7], " +temp8+ " [8], or " +temp9+ " [9]?", temp); 
+				if (temp==1) temp1c++;
+				else if (temp==2) temp2c++;
+				else if (temp==3) temp3c++;
+				else if (temp==4) temp4c++;
+				else if (temp==5) temp5c++;
+				else if (temp==6) temp6c++;
+				else if (temp==7) temp7c++;
+				else if (temp==8) temp8c++;
+				else if (temp==9) temp9c++;
+				makeArrow(x + 3*i_roi_edge / 8, y + 1 * i_roi_edge / 3, x +3* i_roi_edge / 8, y + 1*i_roi_edge / 4 , "Filled Small");
+				Roi.setStrokeColor(arrow_color);
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();	
+				makeArrow(x + 5*i_roi_edge / 8, y +  i_roi_edge / 3, x + 5*i_roi_edge /8, y + 1*i_roi_edge / 4 , "Filled Small");
+				Roi.setStrokeColor("red");
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();
+	 
+if (phasenum==1) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1]", temp);
+else if (phasenum==2) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2]?", temp);
+else if (phasenum==3) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], "+temp2+ " [2], or " +temp3+ " [3]?", temp);
+else if (phasenum==4) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], "+temp2+ " [2], " +temp3+ " [3], or " +temp4+ " [4]?", temp);
+else if (phasenum==5) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], or " +temp5+ " [5]?", temp);
+else if (phasenum==6) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], or " +temp6+ " [6]?", temp);
+else if (phasenum==7) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], or " +temp7+ " [7]?", temp);
+else if (phasenum==8) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], " +temp7+ " [7], or " +temp8+ " [8]?", temp);	
+else if (phasenum==9) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], " +temp7+ " [7], " +temp8+ " [8], or " +temp9+ " [9]?", temp); 
+				if (temp==1) temp1c++;
+				else if (temp==2) temp2c++;
+				else if (temp==3) temp3c++;
+				else if (temp==4) temp4c++;
+				else if (temp==5) temp5c++;
+				else if (temp==6) temp6c++;
+				else if (temp==7) temp7c++;
+				else if (temp==8) temp8c++;
+				else if (temp==9) temp9c++;
+				makeArrow(x + 5*i_roi_edge / 8, y +  i_roi_edge / 3, x + 5*i_roi_edge /8, y + 1*i_roi_edge / 4 , "Filled Small");
+				Roi.setStrokeColor(arrow_color);
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();
+				makeArrow(x + 7*i_roi_edge/8, y + i_roi_edge / 3, x + 7*i_roi_edge/8, y + 1*i_roi_edge / 4 , "Filled Small");
+				Roi.setStrokeColor("red");
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();	
+	 
+if (phasenum==1) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1]", temp);
+else if (phasenum==2) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2]?", temp);
+else if (phasenum==3) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], "+temp2+ " [2], or " +temp3+ " [3]?", temp);
+else if (phasenum==4) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], "+temp2+ " [2], " +temp3+ " [3], or " +temp4+ " [4]?", temp);
+else if (phasenum==5) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], or " +temp5+ " [5]?", temp);
+else if (phasenum==6) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], or " +temp6+ " [6]?", temp);
+else if (phasenum==7) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], or " +temp7+ " [7]?", temp);
+else if (phasenum==8) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], " +temp7+ " [7], or " +temp8+ " [8]?", temp);	
+else if (phasenum==9) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], " +temp7+ " [7], " +temp8+ " [8], or " +temp9+ " [9]?", temp); 
+				if (temp==1) temp1c++;
+				else if (temp==2) temp2c++;
+				else if (temp==3) temp3c++;
+				else if (temp==4) temp4c++;
+				else if (temp==5) temp5c++;
+				else if (temp==6) temp6c++;
+				else if (temp==7) temp7c++;
+				else if (temp==8) temp8c++;
+				else if (temp==9) temp9c++;
+				makeArrow(x + 7*i_roi_edge/8, y + i_roi_edge / 3, x + 7*i_roi_edge/8, y + 1*i_roi_edge / 4 , "Filled Small");
+				Roi.setStrokeColor(arrow_color);
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();	
+				makeArrow(x+i_roi_edge /8 , y + 2*i_roi_edge / 3, x+i_roi_edge / 8 , y + 3*i_roi_edge / 4, "Filled Small");
+				Roi.setStrokeColor("red");
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();
+ 
+if (phasenum==1) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1]", temp);
+else if (phasenum==2) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2]?", temp);
+else if (phasenum==3) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], "+temp2+ " [2], or " +temp3+ " [3]?", temp);
+else if (phasenum==4) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], "+temp2+ " [2], " +temp3+ " [3], or " +temp4+ " [4]?", temp);
+else if (phasenum==5) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], or " +temp5+ " [5]?", temp);
+else if (phasenum==6) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], or " +temp6+ " [6]?", temp);
+else if (phasenum==7) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], or " +temp7+ " [7]?", temp);
+else if (phasenum==8) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], " +temp7+ " [7], or " +temp8+ " [8]?", temp);	
+else if (phasenum==9) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], " +temp7+ " [7], " +temp8+ " [8], or " +temp9+ " [9]?", temp); 
+				if (temp==1) temp1c++;
+				else if (temp==2) temp2c++;
+				else if (temp==3) temp3c++;
+				else if (temp==4) temp4c++;
+				else if (temp==5) temp5c++;
+				else if (temp==6) temp6c++;
+				else if (temp==7) temp7c++;
+				else if (temp==8) temp8c++;
+				else if (temp==9) temp9c++;
+				makeArrow(x+i_roi_edge /8 , y + 2*i_roi_edge / 3, x+i_roi_edge / 8 , y + 3*i_roi_edge / 4, "Filled Small");
+				Roi.setStrokeColor(arrow_color);
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();
+				makeArrow(x + 3*i_roi_edge / 8, y + 2*i_roi_edge / 3, x +3* i_roi_edge / 8, y + 3*i_roi_edge / 4 , "Filled Small");
+				Roi.setStrokeColor("red");
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();	
+ 
+if (phasenum==1) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1]", temp);
+else if (phasenum==2) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2]?", temp);
+else if (phasenum==3) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], "+temp2+ " [2], or " +temp3+ " [3]?", temp);
+else if (phasenum==4) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], "+temp2+ " [2], " +temp3+ " [3], or " +temp4+ " [4]?", temp);
+else if (phasenum==5) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], or " +temp5+ " [5]?", temp);
+else if (phasenum==6) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], or " +temp6+ " [6]?", temp);
+else if (phasenum==7) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], or " +temp7+ " [7]?", temp);
+else if (phasenum==8) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], " +temp7+ " [7], or " +temp8+ " [8]?", temp);	
+else if (phasenum==9) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], " +temp7+ " [7], " +temp8+ " [8], or " +temp9+ " [9]?", temp); 
+				if (temp==1) temp1c++;
+				else if (temp==2) temp2c++;
+				else if (temp==3) temp3c++;
+				else if (temp==4) temp4c++;
+				else if (temp==5) temp5c++;
+				else if (temp==6) temp6c++;
+				else if (temp==7) temp7c++;
+				else if (temp==8) temp8c++;
+				else if (temp==9) temp9c++;
+				makeArrow(x + 3*i_roi_edge / 8, y + 2*i_roi_edge / 3, x +3* i_roi_edge / 8, y + 3*i_roi_edge / 4 , "Filled Small");
+				Roi.setStrokeColor(arrow_color);
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();	
+				makeArrow(x + 5*i_roi_edge / 8, y +2*i_roi_edge / 3, x + 5*i_roi_edge /8, y + 3*i_roi_edge / 4 , "Filled Small");
+				Roi.setStrokeColor("red");
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();
+ 
+if (phasenum==1) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1]", temp);
+else if (phasenum==2) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2]?", temp);
+else if (phasenum==3) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], "+temp2+ " [2], or " +temp3+ " [3]?", temp);
+else if (phasenum==4) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], "+temp2+ " [2], " +temp3+ " [3], or " +temp4+ " [4]?", temp);
+else if (phasenum==5) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], or " +temp5+ " [5]?", temp);
+else if (phasenum==6) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], or " +temp6+ " [6]?", temp);
+else if (phasenum==7) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], or " +temp7+ " [7]?", temp);
+else if (phasenum==8) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], " +temp7+ " [7], or " +temp8+ " [8]?", temp);	
+else if (phasenum==9) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], " +temp7+ " [7], " +temp8+ " [8], or " +temp9+ " [9]?", temp); 
+				if (temp==1) temp1c++;
+				else if (temp==2) temp2c++;
+				else if (temp==3) temp3c++;
+				else if (temp==4) temp4c++;
+				else if (temp==5) temp5c++;
+				else if (temp==6) temp6c++;
+				else if (temp==7) temp7c++;
+				else if (temp==8) temp8c++;
+				else if (temp==9) temp9c++;
+				makeArrow(x + 5*i_roi_edge / 8, y + 2*i_roi_edge / 3, x + 5*i_roi_edge /8, y + 3*i_roi_edge / 4 , "Filled Small");
+				Roi.setStrokeColor(arrow_color);
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();
+				makeArrow(x + 7*i_roi_edge/8, y + 2*i_roi_edge / 3, x + 7*i_roi_edge/8, y + 3*i_roi_edge / 4 , "Filled Small");
+				Roi.setStrokeColor("red");
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();	
+	 
+if (phasenum==1) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1]", temp);
+else if (phasenum==2) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2]?", temp);
+else if (phasenum==3) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], "+temp2+ " [2], or " +temp3+ " [3]?", temp);
+else if (phasenum==4) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], "+temp2+ " [2], " +temp3+ " [3], or " +temp4+ " [4]?", temp);
+else if (phasenum==5) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], or " +temp5+ " [5]?", temp);
+else if (phasenum==6) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], or " +temp6+ " [6]?", temp);
+else if (phasenum==7) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], or " +temp7+ " [7]?", temp);
+else if (phasenum==8) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], " +temp7+ " [7], or " +temp8+ " [8]?", temp);	
+else if (phasenum==9) temp=getNumber("Is the  arrow pointing on " +temp1+ " press [1], or "+temp2+ " [2], " +temp3+ " [3], " +temp4+ " [4], " +temp5+ " [5], " +temp6+ " [6], " +temp7+ " [7], " +temp8+ " [8], or " +temp9+ " [9]?", temp); 
+				if (temp==1) temp1c++;
+				else if (temp==2) temp2c++;
+				else if (temp==3) temp3c++;
+				else if (temp==4) temp4c++;
+				else if (temp==5) temp5c++;
+				else if (temp==6) temp6c++;
+				else if (temp==7) temp7c++;
+				else if (temp==8) temp8c++;
+				else if (temp==9) temp9c++;
+				makeArrow(x + 7*i_roi_edge/8, y + 2*i_roi_edge / 3, x + 7*i_roi_edge/8, y + 3*i_roi_edge / 4 , "Filled Small");
+				Roi.setStrokeColor(arrow_color);
+				Roi.setStrokeWidth(9);
+				Overlay.addSelection();	
+				makeRectangle(x, y, i_roi_edge, i_roi_edge);
+				if (linenum!=0) {char=getString("Hit key to represent crossing of phase. When done hit 'enter'.", ' '); tempc=lengthOf(char); phase+=tempc; showMessage("The phase was counted " +tempc+ " times.");}
+				Count++;}
+					
+			}
+		}
+	
+
+	// write the results to the results file and prompt the user with aggregate fraction
+	s_report = "Point count results for " + s_name;
+	s_report += "		Total # of squares: " + (Count-1);
+	s_report += "		Square size (pixel^2): " +(i_roi_edge*i_roi_edge);
+	s_report += "		Total area analyzed (pixel^2): " + ((Count-1)*(i_roi_edge*i_roi_edge));
+	s_report += "\n		" +temp1+ " count, " + temp1c +"\n";
+	s_report += "\n		" +temp2+ " count, " + temp2c +"\n";
+	s_report += "\n		" +temp3+ " count, " + temp3c +"\n";
+	s_report += "\n		" +temp4+ " count, " + temp4c +"\n";
+	s_report += "\n		" +temp5+ " count, " + temp5c +"\n";
+	s_report += "\n		" +temp6+ " count, " + temp6c +"\n";
+	s_report += "\n		" +temp7+ " count, " + temp7c +"\n";
+	s_report += "\n		" +temp8+ " count, " + temp8c +"\n";
+	s_report += "\n		" +temp9+ " count, " + temp9c +"\n";
+	s_report += "\n		Phase count= " +phase;
+	f = File.open(s_results);
+	print(f, s_report);
+	File.close(f);
+	
+	if (arrownum==1||arrownum==2||arrownum==4||arrownum==8){
+	beep();showMessage( "Counted =" + (Count-1) + "\nSquare size (pixel^2)= " +(i_roi_edge*i_roi_edge)+ "\nTotal area analyzed (pixel^2)=" +((Count-1)*i_roi_edge*i_roi_edge) 
+	+"\n" +temp1+ " count: " +temp1c
+	+"\n" +temp2+ " count: " +temp2c
+	+"\n" +temp3+ " count: " +temp3c
+	+"\n" +temp4+ " count: " +temp4c
+	+"\n" +temp5+ " count: " +temp5c
+	+"\n" +temp6+ " count: " +temp6c
+	+"\n" +temp7+ " count: " +temp7c
+	+"\n" +temp8+ " count: " +temp8c
+	+"\n" +temp9+ " count: " +temp9c
+	+ "\nPhase recorded " +phase+ " times \n Results stored to " + s_results );}
+	else {showMessage("Select a rectangular analysis area and rerun the macro."); }
+
+}
